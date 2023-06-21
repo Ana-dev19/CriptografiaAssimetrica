@@ -1,0 +1,32 @@
+package src;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import javax.crypto.Cipher;
+
+
+    public class CriptografiaAssimetrica {
+        public static void main(String[] args) throws Exception {
+            // Gerar par de chaves
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(2048);
+            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+            
+            PublicKey publicKey = keyPair.getPublic();
+            PrivateKey privateKey = keyPair.getPrivate();
+
+            String textoOriginal = "Texto original";
+
+            // Criptografar com chave pública
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            byte[] textoCriptografado = cipher.doFinal(textoOriginal.getBytes());
+
+            // Descriptografar com chave privada
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+            String textoDescriptografado = new String(cipher.doFinal(textoCriptografado));
+
+            System.out.println(textoDescriptografado);
+        }
+    }
